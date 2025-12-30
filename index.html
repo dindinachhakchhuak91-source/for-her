@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For You ❤️</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* ---------- SCREENS ---------- */
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .active {
+      display: flex;
+    }
+
+    /* ---------- BUTTON ---------- */
+    button {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #ff8c42;
+      color: white;
+    }
+
+    /* ---------- INTRO ---------- */
+    #intro {
+      background-image: url('Background.jpeg');
+    }
+
+    .intro-box {
+      background: rgba(0, 0, 0, 0.45);
+      padding: 25px;
+      border-radius: 14px;
+      text-align: center;
+      color: white;
+    }
+
+    /* ---------- SLIDESHOW ---------- */
+    #slideshow {
+      flex-direction: column;
+      background-image: url('Background.jpeg');
+    }
+
+    #slideshow::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    #mediaContainer,
+    .caption,
+    .controls {
+      position: relative;
+      z-index: 1;
+    }
+
+    #mediaContainer img,
+    #mediaContainer video {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 12px;
+    }
+
+    .caption {
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    /* ---------- ENVELOPE ---------- */
+    #envelopeScreen {
+      background-image: url('Background.jpeg');
+      flex-direction: column;
+    }
+
+    #envelope {
+      width: 220px;
+      margin-bottom: 15px;
+    }
+
+    #openBtn {
+      margin-bottom: 10px;
+    }
+
+    #letter {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 90%;
+      max-height: 60%;
+      overflow-y: auto;
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- INTRO -->
+  <div id="intro" class="screen active">
+    <div class="intro-box">
+      <h1>HAPPY NEW YEAR</h1><br>
+      <p>Are you ready to go on a journey with me?</p><br>
+      <button onclick="startJourney()">PRESS THIS IF YES</button>
+    </div>
+  </div>
+
+  <!-- SLIDESHOW -->
+  <div id="slideshow" class="screen">
+    <div id="mediaContainer"></div>
+    <div class="caption" id="caption"></div>
+    <div class="controls">
+      <button onclick="prevSlide()">◀</button>
+      <button onclick="nextSlide()">▶</button>
+    </div>
+  </div>
+
+  <!-- ENVELOPE -->
+  <div id="envelopeScreen" class="screen">
+    <img id="envelope" src="Envelope close.png">
+    <button id="openBtn" onclick="openEnvelope()">OPEN ❤️</button>
+
+    <div id="letter">
+      <p>
+        First of all Happiest New Year. Hei leh chen te kan lo in hre ve tawh a hetia lo awm ve hi ka lawm em em
+        e.<br><br>
+        Chuan hei hi Anniversary gift leh kan rewind ang in min lo pawm sak hram la,<br>
+        chuan nakum ah real anniversary te pawh kan neih ka beisei ho ti tho mah la.<br><br>
+        Tun kumthar hi nuam tak leh hlim tak a hmang thei tur induh sak na ka hlan a che.
+        (ka tel chuan nuam sa 😊)<br><br>
+
+        I LOVE YOU SO SO MUCH ❤️
+
+        <br><br>
+        <b>P.S.</b> I hope we stay together forever.
+        <br><br>
+        — Dindina
+      </p>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="Background music.mp4" loop></audio>
+
+  <script>
+    const slides = [
+      { f: 'Slide show 1.jpg', t: 'Farewell zan kha I lam thiam em em naza 😊' },
+      { f: 'Slide show 2.jpg', t: 'Kan soft launch ve deuh reuh ruah sur hnuai walk lai kha' },
+      { f: 'Slide show 3.jpg', t: 'In fist bump lai lem lem' },
+      { f: 'Slide show 4.jpg', t: 'Sport lai basketball in khelh nikha' },
+      { f: 'Slide show 5.jpg', t: 'Pangai deuh a couple pic kan lak hmasak ve ber ni in ka hria' },
+      { f: 'Slide show 6.jpg', t: 'Sport cultural day ni I mawi a hmelthat zia hi' },
+      { f: 'Slide show 7.jpg', t: 'Min judge ami te hi aw ka ti tah hi chuan, nge ka hmai ah thil kai mi tih te 😊' },
+      { f: 'Slide show 8.mp4', t: 'Polaroid pic kan lak lai kha' },
+      { f: 'Slide show 9.mp4', t: 'Sport lai a powder mi min hnawih hluai hluai lai 😊' },
+      { f: 'Slide show 10.jpg', t: 'I han awm dan vel hi cute reuh lutuk chuan Next tih hmet leh rawh one last surprise.' }
+    ];
+
+    let i = 0;
+
+    function startJourney() {
+      document.getElementById('intro').classList.remove('active');
+      document.getElementById('slideshow').classList.add('active');
+      const music = document.getElementById('bgMusic');
+      music.volume = 0.25;
+      music.play();
+      loadSlide();
+    }
+
+    function loadSlide() {
+      const container = document.getElementById('mediaContainer');
+      container.innerHTML = '';
+      const s = slides[i];
+      let el;
+
+      if (s.f.endsWith('.mp4')) {
+        el = document.createElement('video');
+        el.src = s.f;
+        el.autoplay = true;
+        el.loop = true;
+        el.muted = true;
+        el.playsInline = true;
+      } else {
+        el = document.createElement('img');
+        el.src = s.f;
+      }
+
+      container.appendChild(el);
+      document.getElementById('caption').innerText = s.t;
+    }
+
+    function nextSlide() {
+      if (i < slides.length - 1) {
+        i++;
+        loadSlide();
+      } else {
+        document.getElementById('slideshow').classList.remove('active');
+        document.getElementById('envelopeScreen').classList.add('active');
+
+        document.getElementById('envelope').src = 'Envelope close.png';
+        document.getElementById('letter').style.display = 'none';
+        document.getElementById('openBtn').style.display = 'block';
+      }
+    }
+
+    function prevSlide() {
+      if (i > 0) {
+        i--;
+        loadSlide();
+      }
+    }
+
+    function openEnvelope() {
+      document.getElementById('envelope').src = 'Envelope open.png';
+      document.getElementById('letter').style.display = 'block';
+      document.getElementById('openBtn').style.display = 'none';
+    }
+  </script>
+
+</body>
+
+</html>
