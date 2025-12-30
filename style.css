@@ -121,3 +121,28 @@ html, body {
   max-height: 60%;
   overflow-y: auto;
 }
+/* -------- iOS SAFARI FIX -------- */
+@supports (-webkit-touch-callout: none) {
+
+  html, body {
+    height: -webkit-fill-available;
+  }
+
+  .screen {
+    min-height: -webkit-fill-available;
+  }
+
+  #mediaContainer {
+    height: 55svh; /* iOS-safe viewport */
+    padding-bottom: 140px;
+  }
+
+  #mediaContainer img,
+  #mediaContainer video {
+    max-height: 100%;
+  }
+
+  .controls {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+  }
+}
